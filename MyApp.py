@@ -151,7 +151,7 @@ class Butt(QWidget):
         def on_click1():
             # self.dialog.show()
             thread.WS.send("{COMMAND: 'EXECUTE_ACTION', PARAM: 'actSetup'}")
-        def on_click(button_action):
+        def on_click():
             print('cliclll')
             thread.WS.send("{COMMAND: 'EXECUTE_ACTION', PARAM: 'actTarring'}")
 
@@ -160,19 +160,32 @@ class Butt(QWidget):
         button_action.resize(100,50)
         button.resize(100,50)
         button_action.move(500,10)
+class MenuButton(QWidget):
+    def __init__(self, name, window, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
+        button = QPushButton(name, self)
+        button.resize(150,150)
+        
+        def on_click2():
+            print('jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj')
+        button.clicked.connect(on_click2)
 class SecondWindow(QMainWindow):
     def __init__(self, parent=None):
         super(SecondWindow, self).__init__(parent)
         self.setWindowTitle("Dialog")
         self.setFixedSize(1024, 600)
         self.layout = QGridLayout()
+    def on_click1():
+        self.close()
     def menus(self, array):
         i = 0
         j = 0
         for w in array:
             if (w['Name']):
-                button = QPushButton(w['Name'])
+                print(w['Name'])
+                button = MenuButton(w['Name'], self)
+                
                 # button.move(0, -200)
                 self.layout.addWidget(button,i,j)
                 j += 1
