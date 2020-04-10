@@ -11,27 +11,65 @@ import threading
 from time import sleep
 from threading import Timer
 
+class Icon(QWidget):
+    def __init__(self, pixmap, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # self.vertLayout = QVBoxLayout()
+        self._labelI = QLabel(self)
+        self._labelI.setAlignment(Qt.AlignLeft)
+        # self._label= QLabel(self)
+        # self._label.setAlignment(Qt.AlignLeft)
+        # self.pixmap = QPixmap('stable_black.svg')
+            # self.pixmap = QPixmap('stable_black.svg')
+        self.pixmap1 = pixmap.scaledToHeight(20)
+        self._labelI.setPixmap(self.pixmap1)
+        # self._label.setText('TTTT')
+        
+        # self.vertLayout.addWidget(self._labelI)
+        # self.vertLayout.addWidget(self._label)
+        # self.pixmap = QPixmap()
+        # widget = QWidget()
+        # widget.setLayout(self.vertLayout)
+        # self.setCentralWidget(widget)
+    
+    def setVis(self, isVisible):
+        print(isVisible)
+        if (isVisible == False):
+            # self.pixmap1.detach()
+            self._labelI.setFixedWidth(0)
+        else:
+            # self.pixmap1.detach()
+            self._labelI.setFixedWidth(100)
+
+            
+            
+        # else:
+        #     # pixmap = QPixmap('stable_black.svg')
+        #     pixmap1.detach()
+        #     # self.pixmap = QPixmap()
+        # # self.pixmap1 = self.pixmap.scaledToHeight(20)
+        
 class Mass(QWidget):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.text = '8888888'
+        self.text = 'INIT SCALE'
         # self.vertLayout = QVBoxLayout()
         self._label = QLabel(self)
-        self._label.setMargin(10)
-        self._label.setAlignment(Qt.AlignRight)
+        self._label.setMargin(0)
+        self._label.setAlignment(Qt.AlignLeft)
         self.color = '#000000'
         
-        self._label.setText('<p style="color:#000000; font-size:150pt">'+self.text+'</p>')
+        self._label.setText('<p style="color:#000000; font-size:130pt">'+self.text+'</p>')
         # self.vertLayout.addWidget(self._label)
 
     def setText(self, text1):
-        print(text1)
+        # print(text1)
         # color = '#000000'
         if (int(text1) < 0):
             self.color = '#ff0000'
         else:
             self.color='#000000'
-        self._label.setText('<p style="color:'+ self.color +'; font-size:150pt">'+text1+'</p>')
+        self._label.setText('<p style="color:'+ self.color +'; font-size:130pt">'+text1+'</p>')
 
 class _Progress(QWidget):
     def __init__(self, pixmap, *args, **kwargs):
@@ -42,7 +80,7 @@ class _Progress(QWidget):
         self._label.setMargin(1)
         
         pixmap1 = pixmap.scaledToHeight(49)
-        pixmap.scaled(2,2, Qt.KeepAspectRatioByExpanding)
+        # pixmap.scaled(2,2, Qt.KeepAspectRatioByExpanding)
         # pixmap.
         self._label.setPixmap(pixmap1)
         # self.vertLayout.addWidget(self._label)
@@ -52,9 +90,9 @@ class _Progress(QWidget):
         #     QSizePolicy.MinimumExpanding
         # )
         # self.paintEvent()
-        
+        # self._label.move(0,50)
     def sizeHint(self):
-        return QSize(400,120)
+        return QSize(605,120)
 
     def setText(self, text1):
         print(text1)
@@ -99,7 +137,23 @@ class RepeatedTimer(object):
         self._timer.cancel()
         self.is_running = False
 
+class Butt(QWidget):
+    def __init__(self, thread, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        button_action = QPushButton(QIcon('kolo.svg'),"Tara", self)
+        # button_action.sizeHint()
+        # x = button_action.keyPressEvent(e)
+        # print(x)
+        # button_action.setGeometry(QRect(200, 150, 93, 28))\
+        
+        # @pyqtSlot()
+        def on_click(button_action):
+            print('cliclll')
+            thread.WS.send("{COMMAND: 'EXECUTE_ACTION', PARAM: 'actTarring'}")
 
+        button_action.clicked.connect(on_click)
+        button_action.resize(100,50)
+        button_action.move(500,10)
 class MainWindow(QMainWindow):
     def __init__(self, *args, **kwargs):
         super(MainWindow, self).__init__(*args, **kwargs)
@@ -120,6 +174,11 @@ class MainWindow(QMainWindow):
         # self.addToolBar(toolbar)
 
         self.mainLayout = QVBoxLayout()
+        self.layout1 = QHBoxLayout()
+        self.layout1_1 = QVBoxLayout()
+        self.layout1_2 = QHBoxLayout()
+        self.layout2 = QHBoxLayout()
+        self.layout3 = QHBoxLayout()
         self.thread = ListenWebsocket()
         self.thread.start()
 
@@ -128,10 +187,27 @@ class MainWindow(QMainWindow):
         self.label = Mass()
         # self.setCentralWidget(self.progress)
         # self.setCentralWidget(self.label)
+        stableIcon = QPixmap('stable_black.svg')
+        taraIcon = QPixmap('tara_black.svg')
+        zeroIcon = QPixmap('zero.svg')
+        self.iconS = Icon(stableIcon)
+        self.iconT = Icon(taraIcon)
+        self.iconZ = Icon(zeroIcon)
+        self.layout1_1.addWidget(self.iconS)
+        self.layout1_1.addWidget(self.iconT)
+        self.layout1_1.addWidget(self.iconZ)
+        # self.layout1.addWidget(self.icons)
+        self.layout2.addWidget(self.progress)
         
-        
-        self.mainLayout.addWidget(self.label)
-        self.mainLayout.addWidget(self.progress)
+        self.layout2.setAlignment(Qt.AlignCenter)
+        self.layout1.addLayout(self.layout1_1)
+        self.layout1_2.addWidget(self.label)
+        self.layout1.addLayout(self.layout1_2)
+        button_action = Butt(self.thread)
+        self.layout3.addWidget(button_action)
+        self.mainLayout.addLayout(self.layout1)
+        self.mainLayout.addLayout(self.layout2)
+        self.mainLayout.addLayout(self.layout3)
         self.setLayout(self.mainLayout)
         widget = QWidget()
         widget.setLayout(self.mainLayout)
@@ -190,8 +266,13 @@ class MainWindow(QMainWindow):
         self.thread.WS.send("{COMMAND: 'GET_MOD_INFO'}")
         x = json.loads(self.thread.getMessage())
         self.progress.setWidth(int(x['RECORD']['Mass'][0]['NetAct']['Value']))
-
+        visible = x['RECORD']['Mass'][0]
+        self.iconS.setVis(visible['isStab'])
+        self.iconT.setVis(visible['isTare'])
+        self.iconZ.setVis(visible['isZero'])
         self.label.setText(str(x['RECORD']['Mass'][0]['NetAct']['Value']))
+        # print(x['RECORD']['Mass'][0]['isStab'])
+        
         # if (int(x['RECORD']['Mass'][0]['NetAct']['Value'])>300):
         #     self.color = '#0000ff'
         # else:
