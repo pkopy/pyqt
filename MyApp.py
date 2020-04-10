@@ -33,7 +33,7 @@ class Icon(QWidget):
         # self.setCentralWidget(widget)
     
     def setVis(self, isVisible):
-        print(isVisible)
+        # print(isVisible)
         if (isVisible == False):
             # self.pixmap1.detach()
             self._labelI.setFixedWidth(0)
@@ -145,15 +145,45 @@ class Butt(QWidget):
         # x = button_action.keyPressEvent(e)
         # print(x)
         # button_action.setGeometry(QRect(200, 150, 93, 28))\
-        
+        button = QPushButton('New Window', self)
         # @pyqtSlot()
+        self.dialog = SecondWindow()
+        def on_click1():
+            # self.dialog.show()
+            thread.WS.send("{COMMAND: 'EXECUTE_ACTION', PARAM: 'actSetup'}")
         def on_click(button_action):
             print('cliclll')
             thread.WS.send("{COMMAND: 'EXECUTE_ACTION', PARAM: 'actTarring'}")
 
         button_action.clicked.connect(on_click)
+        button.clicked.connect(on_click1)
         button_action.resize(100,50)
+        button.resize(100,50)
         button_action.move(500,10)
+
+class SecondWindow(QMainWindow):
+    def __init__(self, parent=None):
+        super(SecondWindow, self).__init__(parent)
+        self.setWindowTitle("Dialog")
+        self.setFixedSize(1024, 600)
+        self.layout = QGridLayout()
+    def menus(self, array):
+        i = 0
+        j = 0
+        for w in array:
+            if (w['Name']):
+                button = QPushButton(w['Name'])
+                # button.move(0, -200)
+                self.layout.addWidget(button,i,j)
+                j += 1
+                if (j == 5):
+                    i += 1
+                    j = 0
+        widget = QWidget()
+        widget.setLayout(self.layout)
+        self.setCentralWidget(widget)
+        self.show()
+    
 class MainWindow(QMainWindow):
     def __init__(self, *args, **kwargs):
         super(MainWindow, self).__init__(*args, **kwargs)
@@ -203,8 +233,11 @@ class MainWindow(QMainWindow):
         self.layout1.addLayout(self.layout1_1)
         self.layout1_2.addWidget(self.label)
         self.layout1.addLayout(self.layout1_2)
+
+        # button = QPushButton('New', self)
         button_action = Butt(self.thread)
         self.layout3.addWidget(button_action)
+        # self.layout3.addWidget(button)
         self.mainLayout.addLayout(self.layout1)
         self.mainLayout.addLayout(self.layout2)
         self.mainLayout.addLayout(self.layout3)
@@ -264,8 +297,18 @@ class MainWindow(QMainWindow):
         # print(self.thread.getMessage())
     def send(self):
         self.thread.WS.send("{COMMAND: 'GET_MOD_INFO'}")
+        self.dialog = SecondWindow()
         x = json.loads(self.thread.getMessage())
-        self.progress.setWidth(int(x['RECORD']['Mass'][0]['NetAct']['Value']))
+        # print(x['COMMAND'])
+        try:
+            self.progress.setWidth(int(x['RECORD']['Mass'][0]['NetAct']['Value']))
+        except:
+            print('coś nie tak')
+        if (x['COMMAND'] == 'EDIT_MESSAGE' and x['PARAM'] == 'SHOW' and x['RECORD']['Type'] == 'Catalog'):
+            print(x['RECORD']['Items'])
+            # self.dialog.show()
+            self.dialog.menus(x['RECORD']['Items'])
+            
         visible = x['RECORD']['Mass'][0]
         self.iconS.setVis(visible['isStab'])
         self.iconT.setVis(visible['isTare'])
