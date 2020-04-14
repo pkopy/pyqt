@@ -8,109 +8,19 @@ import websocket
 import sys
 import json
 import threading
+import Butt
+import Icon
+import Progress
+import SecondWindow
+import DisplayMass
 from time import sleep
 from threading import Timer
 
-class Icon(QWidget):
-    def __init__(self, pixmap, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        # self.vertLayout = QVBoxLayout()
-        self._labelI = QLabel(self)
-        self._labelI.setAlignment(Qt.AlignLeft)
-        # self._label= QLabel(self)
-        # self._label.setAlignment(Qt.AlignLeft)
-        # self.pixmap = QPixmap('stable_black.svg')
-            # self.pixmap = QPixmap('stable_black.svg')
-        self.pixmap1 = pixmap.scaledToHeight(20)
-        self._labelI.setPixmap(self.pixmap1)
-        # self._label.setText('TTTT')
+
         
-        # self.vertLayout.addWidget(self._labelI)
-        # self.vertLayout.addWidget(self._label)
-        # self.pixmap = QPixmap()
-        # widget = QWidget()
-        # widget.setLayout(self.vertLayout)
-        # self.setCentralWidget(widget)
-    
-    def setVis(self, isVisible):
-        # print(isVisible)
-        if (isVisible == False):
-            # self.pixmap1.detach()
-            self._labelI.setFixedWidth(0)
-        else:
-            # self.pixmap1.detach()
-            self._labelI.setFixedWidth(100)
 
-            
-            
-        # else:
-        #     # pixmap = QPixmap('stable_black.svg')
-        #     pixmap1.detach()
-        #     # self.pixmap = QPixmap()
-        # # self.pixmap1 = self.pixmap.scaledToHeight(20)
-        
-class Mass(QWidget):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.text = 'INIT SCALE'
-        # self.vertLayout = QVBoxLayout()
-        self._label = QLabel(self)
-        self._label.setMargin(0)
-        self._label.setAlignment(Qt.AlignLeft)
-        self.color = '#000000'
-        
-        self._label.setText('<p style="color:#000000; font-size:130pt">'+self.text+'</p>')
-        # self.vertLayout.addWidget(self._label)
 
-    def setText(self, text1):
-        # print(text1)
-        # color = '#000000'
-        if (int(text1) < 0):
-            self.color = '#ff0000'
-        else:
-            self.color='#000000'
-        self._label.setText('<p style="color:'+ self.color +'; font-size:130pt">'+text1+'</p>')
 
-class _Progress(QWidget):
-    def __init__(self, pixmap, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.text = 'text'
-        self.vertLayout = QVBoxLayout()
-        self._label = QLabel(self)
-        self._label.setMargin(1)
-        
-        pixmap1 = pixmap.scaledToHeight(49)
-        # pixmap.scaled(2,2, Qt.KeepAspectRatioByExpanding)
-        # pixmap.
-        self._label.setPixmap(pixmap1)
-        # self.vertLayout.addWidget(self._label)
-        self._label.setFixedWidth(0)
-        # self.setSizePolicy(
-        #     QSizePolicy.MinimumExpanding,
-        #     QSizePolicy.MinimumExpanding
-        # )
-        # self.paintEvent()
-        # self._label.move(0,50)
-    def sizeHint(self):
-        return QSize(605,120)
-
-    def setText(self, text1):
-        print(text1)
-        self._label.setText(text1)
-
-    def setWidth(self, w):
-        if(w > 0):
-            self._label.setFixedWidth((w/3000)*600)
-        else:
-            self._label.setFixedWidth(0)
-
-    def paintEvent(self,e):
-        painter = QPainter(self)
-        brush = QBrush()
-        brush.setColor(QColor('black'))
-        brush.setStyle(Qt.SolidPattern)
-        rect = QRect(0, 0, 600, 50)
-        painter.drawRect(rect)
     
 class RepeatedTimer(object):
     def __init__(self, interval, function, *args, **kwargs):
@@ -137,75 +47,13 @@ class RepeatedTimer(object):
         self._timer.cancel()
         self.is_running = False
 
-class Butt(QWidget):
-    def __init__(self, thread, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        button_action = QPushButton(QIcon('kolo.svg'),"Tara", self)
-        # button_action.sizeHint()
-        # x = button_action.keyPressEvent(e)
-        # print(x)
-        # button_action.setGeometry(QRect(200, 150, 93, 28))\
-        button = QPushButton('New Window', self)
-        # @pyqtSlot()
-        # self.dialog = SecondWindow()
-        def on_click1():
-            # self.dialog.show()
-            thread.WS.send("{COMMAND: 'EXECUTE_ACTION', PARAM: 'actSetup'}")
-        def on_click():
-            print('cliclll')
-            # thread.WS.send("{COMMAND: 'EXECUTE_ACTION', PARAM: 'actTarring'}")
 
-        button_action.clicked.connect(on_click)
-        button.clicked.connect(on_click1)
-        button_action.resize(100,50)
-        button.resize(100,50)
-        button_action.move(500,10)
-class MenuButton(QWidget):
-    def __init__(self, name, window, fn, *args, **kwargs):
-        super().__init__(*args, **kwargs)
 
-        button = QPushButton(name, self)
-        button.resize(150,150)
-        
-        
-        x = lambda: fn('jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj')
-        button.clicked.connect(lambda: fn('jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj'))
-class SecondWindow(QMainWindow):
-    def __init__(self, thread, window, parent=None):
-        super(SecondWindow, self).__init__(parent)
-        self.thread = thread
-        self.setWindowTitle("Dialog")
-        self.setFixedSize(1024, 600)
-        self.layout = QGridLayout()
-        def on_click1(self):
-            print('dfsdfsdfsfdsfdsfds')
-    
-        self.window = window
-       # self.close()
-    def menus(self, array, fn):
-       
-        i = 0
-        j = 0
-        for w in array:
-            # if (w['Name']):
-            # print(w['Name'])
-            x = lambda: window.pppp('uuuu')
-            
-            button = MenuButton(w['Name'], self.window, fn)
-            # button.move(0, -200)
-            self.layout.addWidget(button,i,j)
-            j += 1
-            if (j == 5):
-                i += 1
-                j = 0
-        widget = QWidget()
-        widget.setLayout(self.layout)
-        self.setCentralWidget(widget)
-        self.show()
+
     
 class MainWindow(QMainWindow):
     def __init__(self, *args, **kwargs):
-        super(MainWindow, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.windowTitleChanged.connect(self.onWindowTitleChange)
         self.windowTitleChanged.connect(lambda x: self.my_custom_fn(x, 25))
         self.setWindowTitle("My window")
@@ -232,16 +80,16 @@ class MainWindow(QMainWindow):
         self.thread.start()
 
         pixmap = QPixmap('progress.png')
-        self.progress = _Progress(pixmap)
-        self.label = Mass()
+        self.progress = Progress.Progress(pixmap)
+        self.label = DisplayMass.Mass()
         # self.setCentralWidget(self.progress)
         # self.setCentralWidget(self.label)
         stableIcon = QPixmap('stable_black.svg')
         taraIcon = QPixmap('tara_black.svg')
         zeroIcon = QPixmap('zero.svg')
-        self.iconS = Icon(stableIcon)
-        self.iconT = Icon(taraIcon)
-        self.iconZ = Icon(zeroIcon)
+        self.iconT = Icon.Icon(taraIcon)
+        self.iconS = Icon.Icon(stableIcon)
+        self.iconZ = Icon.Icon(zeroIcon)
         self.layout1_1.addWidget(self.iconS)
         self.layout1_1.addWidget(self.iconT)
         self.layout1_1.addWidget(self.iconZ)
@@ -254,16 +102,16 @@ class MainWindow(QMainWindow):
         self.layout1.addLayout(self.layout1_2)
 
         # button = QPushButton('New', self)
-        button_action = Butt(self.thread)
-        # butt2 = MenuButton('Test', self)
+        second = SecondWindow.SecondWindow(self)
+        second.menus()
+        button_action = Butt.Butt(second)
+#         button_action.menus()
         self.layout3.addWidget(button_action)
-        # self.layout3.addWidget(butt2)
-
         # self.layout3.addWidget(button)
         self.mainLayout.addLayout(self.layout1)
         self.mainLayout.addLayout(self.layout2)
         self.mainLayout.addLayout(self.layout3)
-        self.setLayout(self.mainLayout)
+#         self.setLayout(self.mainLayout)
         widget = QWidget()
         widget.setLayout(self.mainLayout)
         self.setCentralWidget(widget)
@@ -305,11 +153,8 @@ class MainWindow(QMainWindow):
         self.xman = self.thread.getMessage()
         # print('dddd'+xman)
         # self.label.setText(self.xman)
-        # self.dialog = SecondWindow(self.thread)
-        # self.dialog.menus()
 
-    def pppp(self, text):
-        print('text:' + text)
+
     def onWindowTitleChange(self, s):
         print("processTextMessage - message: {}".format(s))
 
@@ -322,7 +167,7 @@ class MainWindow(QMainWindow):
         # print(self.thread.getMessage())
     def send(self):
         self.thread.WS.send("{COMMAND: 'GET_MOD_INFO'}")
-        
+        self.dialog = SecondWindow.SecondWindow(self)
         x = json.loads(self.thread.getMessage())
         # print(x['COMMAND'])
         try:
@@ -330,10 +175,9 @@ class MainWindow(QMainWindow):
         except:
             print('coś nie tak')
         if (x['COMMAND'] == 'EDIT_MESSAGE' and x['PARAM'] == 'SHOW' and x['RECORD']['Type'] == 'Catalog'):
-            # print(x['RECORD']['Items'])
+            print(x['RECORD']['Items'])
             # self.dialog.show()
-            self.dialog = SecondWindow(self.thread, window)
-            self.dialog.menus(x['RECORD']['Items'], self.pppp)
+            self.dialog.menus(x['RECORD']['Items'])
             
         visible = x['RECORD']['Mass'][0]
         self.iconS.setVis(visible['isStab'])
@@ -352,7 +196,7 @@ class MainWindow(QMainWindow):
 
 class ListenWebsocket(QThread):
     def __init__(self, parent=None):
-        super(ListenWebsocket, self).__init__(parent)
+        super().__init__(parent)
 
         websocket.enableTrace(True)
 
@@ -383,13 +227,13 @@ class ListenWebsocket(QThread):
         # print('text: '+test)
 
 
-    def on_error(ws, error):
+    def on_error(self, ws, error):
         print(error)
 
 
     def on_open(self):
         self.WS.send('{"COMMAND": "REGISTER_LISTENER", "PARAM": "MENU"}')
-    def on_close(ws):
+    def on_close(self, ws):
         print("### closed ###")
 
     
@@ -405,7 +249,7 @@ app = QApplication(sys.argv)
 window = MainWindow()
 window.show()
 
-rt = RepeatedTimer(0.2, window.send)
+# rt = RepeatedTimer(0.2, window.send)
 # try:
 #     sleep(5) # your long-running job goes here...
 # finally:

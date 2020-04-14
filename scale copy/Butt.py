@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 
 class Butt(QWidget):
-    def __init__(self, thread, *args, **kwargs):
+    def __init__(self, window, *args, **kwargs):
         super().__init__(*args, **kwargs)
         button_action = QPushButton(QIcon('kolo.svg'),"Tara", self)
         # button_action.sizeHint()
@@ -14,11 +14,11 @@ class Butt(QWidget):
         # @pyqtSlot()
 #         self.dialog = SecondWindow()
         def on_click1():
-            # window.show()
-            thread.WS.send("{COMMAND: 'EXECUTE_ACTION', PARAM: 'actSetup'}")
+            window.show()
+#             thread.WS.send("{COMMAND: 'EXECUTE_ACTION', PARAM: 'actSetup'}")
         def on_click():
             print('cliclll')
-            thread.WS.send("{COMMAND: 'EXECUTE_ACTION', PARAM: 'actTarring'}")
+#             thread.WS.send("{COMMAND: 'EXECUTE_ACTION', PARAM: 'actTarring'}")
 
         button_action.clicked.connect(on_click)
         button.clicked.connect(on_click1)

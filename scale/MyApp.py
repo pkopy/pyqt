@@ -102,10 +102,10 @@ class MainWindow(QMainWindow):
         self.layout1.addLayout(self.layout1_2)
 
         # button = QPushButton('New', self)
-        second = SecondWindow.SecondWindow(self)
-        second.menus()
-        button_action = Butt.Butt(second)
-#         button_action.menus()
+        # self.second = '',
+        # second.menus()
+        button_action = Butt.Butt( self.thread)
+        # self.second.menus([])
         self.layout3.addWidget(button_action)
         # self.layout3.addWidget(button)
         self.mainLayout.addLayout(self.layout1)
@@ -167,7 +167,7 @@ class MainWindow(QMainWindow):
         # print(self.thread.getMessage())
     def send(self):
         self.thread.WS.send("{COMMAND: 'GET_MOD_INFO'}")
-        self.dialog = SecondWindow.SecondWindow(self)
+        self.second = SecondWindow.SecondWindow(self)
         x = json.loads(self.thread.getMessage())
         # print(x['COMMAND'])
         try:
@@ -175,9 +175,9 @@ class MainWindow(QMainWindow):
         except:
             print('coś nie tak')
         if (x['COMMAND'] == 'EDIT_MESSAGE' and x['PARAM'] == 'SHOW' and x['RECORD']['Type'] == 'Catalog'):
-            print(x['RECORD']['Items'])
+            # print(x['RECORD']['Items'])
             # self.dialog.show()
-            self.dialog.menus(x['RECORD']['Items'])
+            self.second.menus(x['RECORD']['Items'])
             
         visible = x['RECORD']['Mass'][0]
         self.iconS.setVis(visible['isStab'])
@@ -249,7 +249,7 @@ app = QApplication(sys.argv)
 window = MainWindow()
 window.show()
 
-# rt = RepeatedTimer(0.2, window.send)
+rt = RepeatedTimer(0.2, window.send)
 # try:
 #     sleep(5) # your long-running job goes here...
 # finally:

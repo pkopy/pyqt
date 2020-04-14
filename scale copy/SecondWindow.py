@@ -13,20 +13,20 @@ class SecondWindow(QMainWindow):
 
     def on_click1(self):
         self.close()
-    def menus(self, array):
+    def menus(self):
         i = 0
         j = 0
-        for w in array:
-            if (w['Name']):
-                print(w['Name'])
-                button = MenuButton.MenuButton(str(w), self)
+        for w in range(100):
+#             if (w['Name']):
+#             print(w['Name'])
+            button = MenuButton.MenuButton(str(w), self, self.parent)
 
-                # button.move(0, -200)
-                self.layout.addWidget(button,i,j)
-                j += 1
-                if (j == 5):
-                    i += 1
-                    j = 0
+            # button.move(0, -200)
+            self.layout.addWidget(button,i,j)
+            j += 1
+            if (j == 5):
+                i += 1
+                j = 0
 
         widget = QWidget()
         widget.setLayout(self.layout)
